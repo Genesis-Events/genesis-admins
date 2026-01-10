@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesis 2025 - Attendance Management</title>
+    
+    <!-- Google Fonts - Modern Professional Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Light Theme Colors */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #3b82f6;
+            --secondary-dark: #2563eb;
+            --success: #10b981;
+            --success-dark: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Colors */
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --primary-light: #a78bfa;
+            --secondary: #60a5fa;
+            --secondary-dark: #3b82f6;
+            --success: #34d399;
+            --success-dark: #10b981;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --dark: #f8fafc;
+            --gray: #cbd5e1;
+            --light: #1e293b;
+            --white: #0f172a;
+            --bg-primary: #1e293b;
+            --bg-secondary: #0f172a;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-toggle i {
+            font-size: 16px;
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .login-container .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .login-card {
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            transform: translateY(0);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 36px;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: var(--success-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            background: var(--bg-secondary);
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-logo i {
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            padding: 30px 0;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card.primary {
+            border-left-color: var(--primary);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.info {
+            border-left-color: var(--secondary);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-input input {
+            padding-left: 48px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Tree View */
+        .tree-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tree-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .tree-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .search-indicator {
+            display: none;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .search-indicator.active {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tree-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .district-group {
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        .district-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .district-header:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
+        }
+
+        .district-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .district-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .district-content {
+            display: none;
+            background: var(--bg-tertiary);
+        }
+
+        .district-content.show {
+            display: block;
+        }
+
+        .participant-list {
+            padding: 16px;
+        }
+
+        .participant-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .participant-card.attended {
+            border-left-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .participant-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .participant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .participant-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .participant-id {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .attendance-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .attendance-badge.attended {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .participant-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .detail-item i {
+            color: var(--primary);
+            width: 16px;
+        }
+
+        .participant-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Activity History */
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .activity-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .activity-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .activity-time {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease-out;
+            border-left: 4px solid transparent;
+            border: 1px solid var(--border-color);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.info {
+            border-left-color: var(--secondary);
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--danger);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .participant-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon" id="themeIcon"></i>
+            <span id="themeText">Dark Mode</span>
+        </button>
+        
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h1>Genesis 2025</h1>
+                <p>Event Organizer Portal</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-logo">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Genesis 2025</span>
+                    </div>
+                    <div class="user-info">
+                        <button class="theme-toggle" id="themeToggleHeader">
+                            <i class="fas fa-moon" id="themeIconHeader"></i>
+                            <span id="themeTextHeader">Dark Mode</span>
+                        </button>
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <span id="currentUser">Admin</span>
+                        <button class="btn btn-outline" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <!-- Statistics Section -->
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="totalParticipants">0</div>
+                                <div class="stat-label">Total Participants</div>
+                            </div>
+                            <div class="stat-icon primary">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="attendedCount">0</div>
+                                <div class="stat-label">Attended</div>
+                            </div>
+                            <div class="stat-icon success">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="attendanceRate">0%</div>
+                                <div class="stat-label">Attendance Rate</div>
+                            </div>
+                            <div class="stat-icon info">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-header">
+                        <h2 class="search-title">Search Participants</h2>
+                        <div class="search-indicator" id="searchIndicator">
+                            <i class="fas fa-search"></i>
+                            <span id="searchText">Searching...</span>
+                        </div>
+                    </div>
+                    <form class="search-form" id="searchForm">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by name or ID...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                    </form>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" id="addParticipantBtn">
+                            <i class="fas fa-user-plus"></i>
+                            Add Participant
+                        </button>
+                        <button class="btn btn-outline" id="viewHistoryBtn">
+                            <i class="fas fa-history"></i>
+                            Activity History
+                        </button>
+                        <button class="btn btn-success" id="exportDataBtn">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tree View Section -->
+                <div class="tree-section">
+                    <div class="tree-header">
+                        <h2 class="tree-title">Participants by District</h2>
+                    </div>
+                    <div class="tree-container" id="treeContainer">
+                        <!-- Tree content will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Participant Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Participant</h2>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editId">ID</label>
+                        <input type="text" id="editId" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editName">Name</label>
+                        <input type="text" id="editName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDegree">Degree Programme</label>
+                        <input type="text" id="editDegree" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editWhatsapp">WhatsApp Number</label>
+                        <input type="text" id="editWhatsapp" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLunch">Lunch Type</label>
+                        <select id="editLunch" class="form-control" required>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Non Vegetarian">Non Vegetarian</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDistrict">Living District</label>
+                        <input type="text" id="editDistrict" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRemarks">Remarks</label>
+                        <textarea id="editRemarks" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelEdit">Cancel</button>
+                <button class="btn btn-primary" id="saveEdit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Participant Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Participant</h2>
+                <button class="modal-close" id="closeAddModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="addId">ID</label>
+                        <input type="text" id="addId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addName">Name</label>
+                        <input type="text" id="addName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDegree">Degree Programme</label>
+                        <input type="text" id="addDegree" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addEmail">Email</label>
+                        <input type="email" id="addEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addWhatsapp">WhatsApp Number</label>
+                        <input type="text" id="addWhatsapp" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addLunch">Lunch Type</label>
+                        <select id="addLunch" class="form-control" required>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Non Vegetarian">Non Vegetarian</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDistrict">Living District</label>
+                        <input type="text" id="addDistrict" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addRemarks">Remarks</label>
+                        <textarea id="addRemarks" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAdd">Cancel</button>
+                <button class="btn btn-primary" id="saveAdd">Add Participant</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity History Modal -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Activity History</h2>
+                <button class="modal-close" id="closeHistoryModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="activity-list" id="activityList">
+                    <!-- Activity items will be dynamically added here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeHistory">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Global variables
+        let participants = [];
+        let filteredParticipants = [];
+        let activityHistory = [];
+        let currentUser = null;
+        let currentTheme = 'light';
+
+        // DOM elements
+        const loginPage = document.getElementById('loginPage');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchIndicator = document.getElementById('searchIndicator');
+        const searchText = document.getElementById('searchText');
+        const addParticipantBtn = document.getElementById('addParticipantBtn');
+        const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const treeContainer = document.getElementById('treeContainer');
+        const totalParticipantsEl = document.getElementById('totalParticipants');
+        const attendedCountEl = document.getElementById('attendedCount');
+        const attendanceRateEl = document.getElementById('attendanceRate');
+        const currentUserEl = document.getElementById('currentUser');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // Theme toggle elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleHeader = document.getElementById('themeToggleHeader');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeIconHeader = document.getElementById('themeIconHeader');
+        const themeText = document.getElementById('themeText');
+        const themeTextHeader = document.getElementById('themeTextHeader');
+
+        // Modal elements
+        const editModal = document.getElementById('editModal');
+        const addModal = document.getElementById('addModal');
+        const historyModal = document.getElementById('historyModal');
+        const editForm = document.getElementById('editForm');
+        const addForm = document.getElementById('addForm');
+        const activityList = document.getElementById('activityList');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // Modal close buttons
+        const closeEditModal = document.getElementById('closeEditModal');
+        const closeAddModal = document.getElementById('closeAddModal');
+        const closeHistoryModal = document.getElementById('closeHistoryModal');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const cancelAdd = document.getElementById('cancelAdd');
+        const closeHistory = document.getElementById('closeHistory');
+        const saveEdit = document.getElementById('saveEdit');
+        const saveAdd = document.getElementById('saveAdd');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme
+            initializeTheme();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                showDashboard();
+            }
+
+            // Load data from JSON file
+            loadData();
+
+            // Event listeners
+            loginForm.addEventListener('submit', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            searchForm.addEventListener('submit', handleSearch);
+            addParticipantBtn.addEventListener('click', () => showModal(addModal));
+            viewHistoryBtn.addEventListener('click', () => {
+                renderActivityHistory();
+                showModal(historyModal);
+            });
+            exportDataBtn.addEventListener('click', exportData);
+
+            // Theme toggle event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            themeToggleHeader.addEventListener('click', toggleTheme);
+
+            // Modal event listeners
+            closeEditModal.addEventListener('click', () => hideModal(editModal));
+            closeAddModal.addEventListener('click', () => hideModal(addModal));
+            closeHistoryModal.addEventListener('click', () => hideModal(historyModal));
+            cancelEdit.addEventListener('click', () => hideModal(editModal));
+            cancelAdd.addEventListener('click', () => hideModal(addModal));
+            closeHistory.addEventListener('click', () => hideModal(historyModal));
+            saveEdit.addEventListener('click', saveParticipantEdit);
+            saveAdd.addEventListener('click', saveNewParticipant);
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === editModal) hideModal(editModal);
+                if (event.target === addModal) hideModal(addModal);
+                if (event.target === historyModal) hideModal(historyModal);
+            });
+        });
+
+        // Initialize theme
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            currentTheme = savedTheme;
+            applyTheme(savedTheme);
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            
+            // Add to activity history
+            if (currentUser) {
+                addActivity('Theme', `Switched to ${currentTheme} mode`, 'info');
+            }
+        }
+
+        // Apply theme
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+                themeIconHeader.className = 'fas fa-sun';
+                themeText.textContent = 'Light Mode';
+                themeTextHeader.textContent = 'Light Mode';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeIconHeader.className = 'fas fa-moon';
+                themeText.textContent = 'Dark Mode';
+                themeTextHeader.textContent = 'Dark Mode';
+            }
+        }
+
+        // Load data from JSON file
+        async function loadData() {
+            try {
+                const response = await fetch('database.json');
+                const data = await response.json();
+                participants = data.participants || [];
+                filteredParticipants = [...participants];
+                
+                if (currentUser) {
+                    renderTreeView();
+                    updateStatistics();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Failed to load participant data', 'error');
+            }
+        }
+
+        // Login handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Show loading state
+            loginBtn.innerHTML = '<span class="spinner"></span> Signing in...';
+            loginBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // In a real app, you would validate against a database
+                if ((username === 'admin' && password === 'admin123') || 
+                    (username === 'organizer' && password === 'event2025')) {
+                    currentUser = username;
+                    localStorage.setItem('currentUser', username);
+                    currentUserEl.textContent = username;
+                    userAvatar.textContent = username.charAt(0).toUpperCase();
+                    
+                    // Add to activity history
+                    addActivity('Login', `${username} logged in to the system`, 'info');
+                    
+                    showDashboard();
+                    showToast('Login successful', 'success');
+                } else {
+                    showToast('Invalid username or password', 'error');
+                }
+                
+                // Reset button state
+                loginBtn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
+                loginBtn.disabled = false;
+            }, 1000);
+        }
+
+        // Logout handler
+        function handleLogout() {
+            // Add to activity history
+            addActivity('Logout', `${currentUser} logged out of the system`, 'info');
+            
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            loginPage.style.display = 'flex';
+            dashboard.classList.remove('active');
+            showToast('You have been logged out', 'info');
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            loginPage.style.display = 'none';
+            dashboard.classList.add('active');
+            currentUserEl.textContent = currentUser;
+            userAvatar.textContent = currentUser.charAt(0).toUpperCase();
+            renderTreeView();
+            updateStatistics();
+        }
+
+        // Search handler
+        function handleSearch(e) {
+            e.preventDefault();
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filteredParticipants = [...participants];
+                searchIndicator.classList.remove('active');
+            } else {
+                filteredParticipants = participants.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm) || 
+                    p.id.includes(searchTerm)
+                );
+                searchIndicator.classList.add('active');
+                searchText.textContent = `Found ${filteredParticipants.length} results for "${searchTerm}"`;
+            }
+            
+            renderTreeView();
+            
+            // Add to activity history
+            addActivity('Search', `Searched for "${searchTerm}"`, 'info');
+        }
+
+        // Render tree view
+        function renderTreeView() {
+            // Group participants by district
+            const groupedByDistrict = {};
+            filteredParticipants.forEach(participant => {
+                const district = participant.district || 'Unknown';
+                if (!groupedByDistrict[district]) {
+                    groupedByDistrict[district] = [];
+                }
+                groupedByDistrict[district].push(participant);
+            });
+
+            // Clear existing tree
+            treeContainer.innerHTML = '';
+
+            // Create tree nodes for each district
+            Object.keys(groupedByDistrict).sort().forEach(district => {
+                const districtNode = createDistrictNode(district, groupedByDistrict[district]);
+                treeContainer.appendChild(districtNode);
+            });
+        }
+
+        // Create district node
+        function createDistrictNode(district, participants) {
+            const node = document.createElement('div');
+            node.className = 'district-group';
+            
+            const header = document.createElement('div');
+            header.className = 'district-header';
+            header.innerHTML = `
+                <span class="district-name">${district}</span>
+                <span class="district-count">${participants.length} participants</span>
+            `;
+            
+            const content = document.createElement('div');
+            content.className = 'district-content';
+            
+            const participantList = document.createElement('div');
+            participantList.className = 'participant-list';
+            
+            participants.forEach(participant => {
+                const participantCard = createParticipantCard(participant);
+                participantList.appendChild(participantCard);
+            });
+            
+            content.appendChild(participantList);
+            
+            header.addEventListener('click', function() {
+                content.classList.toggle('show');
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                }
+            });
+            
+            node.appendChild(header);
+            node.appendChild(content);
+            
+            return node;
+        }
+
+        // Create participant card
+        function createParticipantCard(participant) {
+            const card = document.createElement('div');
+            card.className = `participant-card ${participant.attended ? 'attended' : ''}`;
+            card.id = `participant-${participant.id}`;
+            
+            const header = document.createElement('div');
+            header.className = 'participant-header';
+            header.innerHTML = `
+                <div class="participant-info">
+                    <h3>${participant.name}</h3>
+                    <div class="participant-id">ID: ${participant.id}</div>
+                </div>
+                ${participant.attended ? '<div class="attendance-badge attended"><i class="fas fa-check-circle"></i> Attended</div>' : ''}
+            `;
+            
+            const details = document.createElement('div');
+            details.className = 'participant-details';
+            details.innerHTML = `
+                <div class="detail-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>${participant.degree}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>${participant.email}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-phone"></i>
+                    <span>${participant.whatsapp}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>${participant.lunchType}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${participant.district}</span>
+                </div>
+                ${participant.remarks ? `
+                <div class="detail-item">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>${participant.remarks}</span>
+                </div>
+                ` : ''}
+            `;
+            
+            const actions = document.createElement('div');
+            actions.className = 'participant-actions';
+            actions.innerHTML = `
+                <button class="btn btn-outline btn-sm edit-btn" data-id="${participant.id}">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn ${participant.attended ? 'btn-outline' : 'btn-success'} btn-sm attendance-btn" data-id="${participant.id}">
+                    <i class="fas fa-user-check"></i> ${participant.attended ? 'Unmark' : 'Mark as Attended'}
+                </button>
+            `;
+            
+            card.appendChild(header);
+            card.appendChild(details);
+            card.appendChild(actions);
+            
+            // Add event listeners to buttons
+            const editBtn = card.querySelector('.edit-btn');
+            const attendanceBtn = card.querySelector('.attendance-btn');
+            
+            editBtn.addEventListener('click', () => openEditModal(participant));
+            attendanceBtn.addEventListener('click', () => toggleAttendance(participant.id));
+            
+            return card;
+        }
+
+        // Open edit modal
+        function openEditModal(participant) {
+            document.getElementById('editId').value = participant.id;
+            document.getElementById('editName').value = participant.name;
+            document.getElementById('editDegree').value = participant.degree;
+            document.getElementById('editEmail').value = participant.email;
+            document.getElementById('editWhatsapp').value = participant.whatsapp;
+            document.getElementById('editLunch').value = participant.lunchType;
+            document.getElementById('editDistrict').value = participant.district;
+            document.getElementById('editRemarks').value = participant.remarks || '';
+            
+            showModal(editModal);
+        }
+
+        // Save participant edit
+        function saveParticipantEdit() {
+            const id = document.getElementById('editId').value;
+            const participantIndex = participants.findIndex(p => p.id === id);
+            
+            if (participantIndex !== -1) {
+                participants[participantIndex] = {
+                    ...participants[participantIndex],
+                    name: document.getElementById('editName').value,
+                    degree: document.getElementById('editDegree').value,
+                    email: document.getElementById('editEmail').value,
+                    whatsapp: document.getElementById('editWhatsapp').value,
+                    lunchType: document.getElementById('editLunch').value,
+                    district: document.getElementById('editDistrict').value,
+                    remarks: document.getElementById('editRemarks').value
+                };
+                
+                // Update filtered participants if needed
+                const filteredIndex = filteredParticipants.findIndex(p => p.id === id);
+                if (filteredIndex !== -1) {
+                    filteredParticipants[filteredIndex] = participants[participantIndex];
+                }
+                
+                renderTreeView();
+                updateStatistics();
+                hideModal(editModal);
+                
+                // Add to activity history
+                addActivity('Edit', `Updated information for ${participants[participantIndex].name}`, 'info');
+                
+                showToast('Participant information updated successfully', 'success');
+            }
+        }
+
+        // Save new participant
+        function saveNewParticipant() {
+            const newParticipant = {
+                id: document.getElementById('addId').value,
+                name: document.getElementById('addName').value,
+                degree: document.getElementById('addDegree').value,
+                email: document.getElementById('addEmail').value,
+                whatsapp: document.getElementById('addWhatsapp').value,
+                lunchType: document.getElementById('addLunch').value,
+                district: document.getElementById('addDistrict').value,
+                paymentStatus: "Pending",
+                attended: false,
+                remarks: document.getElementById('addRemarks').value
+            };
+            
+            // Check if ID already exists
+            if (participants.some(p => p.id === newParticipant.id)) {
+                showToast('A participant with this ID already exists', 'error');
+                return;
+            }
+            
+            participants.push(newParticipant);
+            filteredParticipants.push(newParticipant);
+            
+            renderTreeView();
+            updateStatistics();
+            hideModal(addModal);
+            
+            // Reset form
+            addForm.reset();
+            
+            // Add to activity history
+            addActivity('Add', `Added new participant: ${newParticipant.name}`, 'success');
+            
+            showToast('New participant added successfully', 'success');
+        }
+
+        // Toggle attendance
+        function toggleAttendance(id) {
+            const participantIndex = participants.findIndex(p => p.id === id);
+            
+            if (participantIndex !== -1) {
+                const wasAttended = participants[participantIndex].attended;
+                participants[participantIndex].attended = !wasAttended;
+                
+                // Update filtered participants if needed
+                const filteredIndex = filteredParticipants.findIndex(p => p.id === id);
+                if (filteredIndex !== -1) {
+                    filteredParticipants[filteredIndex].attended = !wasAttended;
+                }
+                
+                renderTreeView();
+                updateStatistics();
+                
+                // Add to activity history
+                const action = wasAttended ? 'Unmarked attendance' : 'Marked as attended';
+                addActivity('Attendance', `${action} for ${participants[participantIndex].name}`, wasAttended ? 'warning' : 'success');
+                
+                showToast(
+                    wasAttended ? 'Attendance unmarked' : 'Marked as attended',
+                    wasAttended ? 'info' : 'success'
+                );
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const total = participants.length;
+            const attended = participants.filter(p => p.attended).length;
+            const rate = total > 0 ? Math.round((attended / total) * 100) : 0;
+            
+            totalParticipantsEl.textContent = total;
+            attendedCountEl.textContent = attended;
+            attendanceRateEl.textContent = `${rate}%`;
+        }
+
+        // Add activity to history
+        function addActivity(type, description, category = 'info') {
+            const now = new Date();
+            const timeString = now.toLocaleString();
+            
+            activityHistory.unshift({
+                type,
+                description,
+                category,
+                time: timeString
+            });
+            
+            // Keep only the last 50 activities
+            if (activityHistory.length > 50) {
+                activityHistory.pop();
+            }
+        }
+
+        // Render activity history
+        function renderActivityHistory() {
+            activityList.innerHTML = '';
+            
+            if (activityHistory.length === 0) {
+                activityList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No activity history available.</p>';
+                return;
+            }
+            
+            activityHistory.forEach(activity => {
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                
+                let iconClass = 'info';
+                if (activity.category === 'success') iconClass = 'success';
+                if (activity.category === 'warning') iconClass = 'warning';
+                
+                item.innerHTML = `
+                    <div class="activity-icon ${iconClass}">
+                        <i class="fas fa-${getActivityIcon(activity.type)}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.description}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+                
+                activityList.appendChild(item);
+            });
+        }
+
+        // Get activity icon
+        function getActivityIcon(type) {
+            switch (type) {
+                case 'Login': return 'sign-in-alt';
+                case 'Logout': return 'sign-out-alt';
+                case 'Search': return 'search';
+                case 'Edit': return 'edit';
+                case 'Add': return 'user-plus';
+                case 'Attendance': return 'user-check';
+                case 'Theme': return 'palette';
+                case 'Export': return 'download';
+                default: return 'info-circle';
+            }
+        }
+
+        // Export data
+        function exportData() {
+            // Create a CSV string
+            let csv = 'ID,Name,Degree Programme,Email,WhatsApp,Lunch Type,District,Payment Status,Attended,Remarks\n';
+            
+            participants.forEach(participant => {
+                csv += `${participant.id},"${participant.name}","${participant.degree}","${participant.email}",${participant.whatsapp},"${participant.lunchType}","${participant.district}","${participant.paymentStatus}",${participant.attended},"${participant.remarks || ''}"\n`;
+            });
+            
+            // Create a blob and download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `genesis_2025_participants_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Add to activity history
+            addActivity('Export', 'Exported participant data as CSV', 'info');
+            
+            showToast('Data exported successfully', 'success');
+        }
+
+        // Show modal
+        function showModal(modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Hide modal
+        function hideModal(modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let iconClass = 'info-circle';
+            if (type === 'success') iconClass = 'check-circle';
+            if (type === 'error') iconClass = 'exclamation-circle';
+            
+            toast.innerHTML = `
+                <i class="fas fa-${iconClass} toast-icon"></i>
+                <div>${message}</div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (toastContainer.contains(toast)) {
+                        toastContainer.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
