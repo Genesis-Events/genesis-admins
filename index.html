@@ -1266,69 +1266,7 @@
             }
 
             // Load data from JSON file
-         // Load data from JSON file
-async function loadData() {
-    try {
-        // Try to load from the root directory first
-        let response = await fetch('./database.json');
-        
-        // If that fails, try with the full path
-        if (!response.ok) {
-            response = await fetch(window.location.origin + '/database.json');
-        }
-        
-        // If that still fails, try with the repository name in the path
-        if (!response.ok) {
-            const pathParts = window.location.pathname.split('/');
-            if (pathParts.length > 1) {
-                const repoName = pathParts[1];
-                response = await fetch(window.location.origin + '/' + repoName + '/database.json');
-            }
-        }
-        
-        if (!response.ok) {
-            throw new Error('Failed to load database file');
-        }
-        
-        const data = await response.json();
-        
-        // Transform the data to match the expected format
-        participants = data.map(item => ({
-            id: item.ID,
-            name: item.Name,
-            degree: item["Degree Programme"],
-            email: item.Email,
-            whatsapp: item["Whatsapp no"],
-            lunchType: item["Lunch Type"],
-            paymentStatus: item["Payment Slip"],
-            district: item["Living District"],
-            attended: false,
-            remarks: ""
-        }));
-        
-        filteredParticipants = [...participants];
-        
-        if (currentUser) {
-            renderTreeView();
-            updateStatistics();
-        }
-    } catch (error) {
-        console.error('Error loading data:', error);
-        
-        // Show error message in the tree container
-        if (treeContainer) {
-            treeContainer.innerHTML = `
-                <div class="loading-container">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--danger); margin-bottom: 16px;"></i>
-                    <p style="color: var(--text-primary);">Failed to load participant data</p>
-                    <p style="color: var(--text-secondary); font-size: 14px;">Please make sure the database.json file is in the correct location</p>
-                </div>
-            `;
-        }
-        
-        showToast('Failed to load participant data. Please check the console for details.', 'error');
-    }
-}
+            loadData();
 
             // Event listeners
             loginForm.addEventListener('submit', handleLogin);
@@ -1399,7 +1337,7 @@ async function loadData() {
             }
         }
 
-        // Load data from JSON file
+        // Load data from JSON file - FIXED VERSION
         async function loadData() {
             try {
                 // Try to load from the root directory first
@@ -1424,13 +1362,29 @@ async function loadData() {
                 }
                 
                 const data = await response.json();
-                participants = data.participants || [];
+                
+                // Transform the data to match the expected format
+                participants = data.map(item => ({
+                    id: item.ID,
+                    name: item.Name,
+                    degree: item["Degree Programme"],
+                    email: item.Email,
+                    whatsapp: item["Whatsapp no"],
+                    lunchType: item["Lunch Type"],
+                    paymentStatus: item["Payment Slip"],
+                    district: item["Living District"],
+                    attended: false,
+                    remarks: ""
+                }));
+                
                 filteredParticipants = [...participants];
                 
                 if (currentUser) {
                     renderTreeView();
                     updateStatistics();
                 }
+                
+                console.log('Successfully loaded', participants.length, 'participants');
             } catch (error) {
                 console.error('Error loading data:', error);
                 
@@ -1517,7 +1471,7 @@ async function loadData() {
             } else {
                 filteredParticipants = participants.filter(p => 
                     p.name.toLowerCase().includes(searchTerm) || 
-                    p.id.includes(searchTerm)
+                    p.id.toString().includes(searchTerm)
                 );
                 searchIndicator.classList.add('active');
                 searchText.textContent = `Found ${filteredParticipants.length} results for "${searchTerm}"`;
@@ -1594,11 +1548,6 @@ async function loadData() {
             
             header.addEventListener('click', function() {
                 content.classList.toggle('show');
-                const icon = this.querySelector('i');
-                if (icon) {
-                    icon.classList.toggle('fa-chevron-down');
-                    icon.classList.toggle('fa-chevron-up');
-                }
             });
             
             node.appendChild(header);
@@ -1696,7 +1645,7 @@ async function loadData() {
         // Save participant edit
         function saveParticipantEdit() {
             const id = document.getElementById('editId').value;
-            const participantIndex = participants.findIndex(p => p.id === id);
+            const participantIndex = participants.findIndex(p => p.id == id);
             
             if (participantIndex !== -1) {
                 participants[participantIndex] = {
@@ -1711,7 +1660,7 @@ async function loadData() {
                 };
                 
                 // Update filtered participants if needed
-                const filteredIndex = filteredParticipants.findIndex(p => p.id === id);
+                const filteredIndex = filteredParticipants.findIndex(p => p.id == id);
                 if (filteredIndex !== -1) {
                     filteredParticipants[filteredIndex] = participants[participantIndex];
                 }
@@ -1743,7 +1692,7 @@ async function loadData() {
             };
             
             // Check if ID already exists
-            if (participants.some(p => p.id === newParticipant.id)) {
+            if (participants.some(p => p.id == newParticipant.id)) {
                 showToast('A participant with this ID already exists', 'error');
                 return;
             }
@@ -1766,14 +1715,14 @@ async function loadData() {
 
         // Toggle attendance
         function toggleAttendance(id) {
-            const participantIndex = participants.findIndex(p => p.id === id);
+            const participantIndex = participants.findIndex(p => p.id == id);
             
             if (participantIndex !== -1) {
                 const wasAttended = participants[participantIndex].attended;
                 participants[participantIndex].attended = !wasAttended;
                 
                 // Update filtered participants if needed
-                const filteredIndex = filteredParticipants.findIndex(p => p.id === id);
+                const filteredIndex = filteredParticipants.findIndex(p => p.id == id);
                 if (filteredIndex !== -1) {
                     filteredParticipants[filteredIndex].attended = !wasAttended;
                 }
@@ -1934,4 +1883,3 @@ async function loadData() {
     </script>
 </body>
 </html>
-
