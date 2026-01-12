@@ -40,6 +40,9 @@
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --link-color: #10b981; /* Green for links */
+            --verified-color: #3b82f6; /* Blue for verified */
+            --done-color: #64748b; /* Gray for done */
         }
 
         [data-theme="dark"] {
@@ -466,7 +469,113 @@
             flex-wrap: wrap;
         }
 
-        /* Tree View */
+        /* Search Results Section */
+        .search-results {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .clear-search {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .clear-search:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .search-results-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .search-result-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .search-result-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .search-result-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .search-result-id {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .search-result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .search-result-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .search-result-detail i {
+            color: var(--primary);
+            width: 16px;
+        }
+
+        .search-result-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Tree View Section */
         .tree-section {
             background: var(--bg-primary);
             border-radius: var(--radius);
@@ -630,6 +739,38 @@
         .detail-item i {
             color: var(--primary);
             width: 16px;
+        }
+
+        .payment-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .payment-status.link {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--link-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-status.link:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .payment-status.verified {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--verified-color);
+        }
+
+        .payment-status.done {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--done-color);
         }
 
         .participant-actions {
@@ -934,7 +1075,7 @@
                     <i class="fas fa-calendar-check"></i>
                 </div>
                 <h1>Genesis 2025</h1>
-                <p>Event Organizer Portal</p>
+                <p>Registration Admin Portal</p>
             </div>
             <form id="loginForm">
                 <div class="form-group">
@@ -1051,6 +1192,20 @@
                             <i class="fas fa-download"></i>
                             Export Data
                         </button>
+                    </div>
+                </div>
+
+                <!-- Search Results Section -->
+                <div class="search-results" id="searchResults">
+                    <div class="search-results-header">
+                        <h2 class="search-results-title">Search Results</h2>
+                        <button class="clear-search" id="clearSearch">
+                            <i class="fas fa-times"></i>
+                            Clear Search
+                        </button>
+                    </div>
+                    <div class="search-results-list" id="searchResultsList">
+                        <!-- Search results will be dynamically added here -->
                     </div>
                 </div>
 
@@ -1204,6 +1359,7 @@
         let activityHistory = [];
         let currentUser = null;
         let currentTheme = 'light';
+        let isSearchActive = false;
 
         // DOM elements
         const loginPage = document.getElementById('loginPage');
@@ -1212,7 +1368,7 @@
         const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput');
+        const searchInput = document = document.getElementById('searchInput');
         const searchIndicator = document.getElementById('searchIndicator');
         const searchText = document.getElementById('searchText');
         const addParticipantBtn = document.getElementById('addParticipantBtn');
@@ -1225,6 +1381,12 @@
         const attendanceRateEl = document.getElementById('attendanceRate');
         const currentUserEl = document.getElementById('currentUser');
         const userAvatar = document.getElementById('userAvatar');
+
+        // Search Results elements
+        const searchResults = document.getElementById('searchResults');
+        const searchResultsList = document.getElementById('searchResultsList');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const searchResultsTitle = document.getElementById('searchResultsTitle');
 
         // Theme toggle elements
         const themeToggle = document.getElementById('themeToggle');
@@ -1292,6 +1454,9 @@
             closeHistory.addEventListener('click', () => hideModal(historyModal));
             saveEdit.addEventListener('click', saveParticipantEdit);
             saveAdd.addEventListener('click', saveNewParticipant);
+            
+            // Clear search button
+            clearSearchBtn.addEventListener('click', clearSearch);
 
             // Close modals when clicking outside
             window.addEventListener('click', function(event) {
@@ -1337,7 +1502,7 @@
             }
         }
 
-        // Load data from JSON file - FIXED VERSION
+        // Load data from JSON file
         async function loadData() {
             try {
                 // Try to load from the root directory first
@@ -1392,7 +1557,7 @@
                 if (treeContainer) {
                     treeContainer.innerHTML = `
                         <div class="loading-container">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--danger); margin-bottom: 16px;"></i>
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--help-text-primary); margin-bottom: 16px;"></i>
                             <p style="color: var(--text-primary);">Failed to load participant data</p>
                             <p style="color: var(--text-secondary); font-size: 14px;">Please make sure the database.json file is in the correct location</p>
                         </div>
@@ -1429,7 +1594,7 @@
                     showDashboard();
                     showToast('Login successful', 'success');
                 } else {
-                    showToast('Invalid username or password', 'error');
+                    showToast('Invalid username or password', 'search-results');
                 }
                 
                 // Reset button state
@@ -1460,27 +1625,157 @@
             updateStatistics();
         }
 
+        // Clear search function
+        function clearSearch() {
+            searchInput.value = '';
+            searchResults.classList.remove('active');
+            treeContainer.style.display = 'block';
+            isSearchActive = false;
+            filteredParticipants = [...participants];
+            renderTreeView();
+            updateStatistics();
+        }
+
         // Search handler
         function handleSearch(e) {
             e.preventDefault();
             const searchTerm = searchInput.value.toLowerCase().trim();
             
             if (searchTerm === '') {
-                filteredParticipants = [...participants];
-                searchIndicator.classList.remove('active');
-            } else {
-                filteredParticipants = participants.filter(p => 
-                    p.name.toLowerCase().includes(searchTerm) || 
-                    p.id.toString().includes(searchTerm)
-                );
-                searchIndicator.classList.add('active');
-                searchText.textContent = `Found ${filteredParticipants.length} results for "${searchTerm}"`;
+                clearSearch();
+                return;
             }
             
-            renderTreeView();
+            // Filter participants based on search term
+            filteredParticipants = participants.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) || 
+                p.id.toString().includes(searchTerm)
+            );
+            
+            // Show search results
+            showSearchResults(searchTerm);
             
             // Add to activity history
             addActivity('Search', `Searched for "${searchTerm}"`, 'info');
+        }
+
+        // Show search results
+        function showSearchResults(searchTerm) {
+            isSearchActive = true;
+            treeContainer.style.display = 'none';
+            searchResults.classList.add('active');
+            searchResultsTitle.textContent = `Search Results for "${searchTerm}"`;
+            
+            // Clear previous results
+            searchResultsList.innerHTML = '';
+            
+            // Add search results
+            filteredParticipants.forEach(participant => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'search-result-item';
+                
+                const header = document.createElement('div');
+                header.className = 'search-result-header';
+                header.innerHTML = `
+                    <div class="search-result-name">${participant.name}</div>
+                    <div class="search-result-id">ID: ${participant.id}</div>
+                `;
+                
+                const details = document.createElement('div');
+                details.className = 'search-result-details';
+                details.innerHTML = `
+                    <div class="search-result-detail">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>${participant.degree}</span>
+                    </div>
+                    <div class="search-result-detail">
+                        <i class="fas fa-envelope"></i>
+                        <span>${participant.email}</span>
+                    </div>
+                    <div class="search-result-detail">
+                        <i class="function createPaymentStatusElement(paymentStatus)">${participant.paymentStatus}</i>
+                        <span>${participant.paymentStatus}</span>
+                    </div>
+                    <div class="search-result-detail">
+                        <i class="fas fa-phone"></i>
+                        <span>${participant.whatsapp}</span>
+                    </div>
+                    <div class="search-result-detail">
+                        <i class="fas fa-utensils"></i>
+                        <span>${participant.lunchType}</span>
+                    </div>
+                    <div class="search-result-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${participant.district}</span>
+                    </div>
+                    ${participant.remarks ? `
+                    <div class="search-result-detail">
+                        <i class="fas fa-sticky-note"></i>
+                        <span>${participant.remarks}</span>
+                    </div>
+                    ` : ''}
+                `;
+                
+                const actions = document.createElement('div');
+                actions.className = 'search-result-actions';
+                actions.innerHTML = `
+                    <button class="btn btn-outline btn-sm edit-btn" data-id="${participant.id}">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn ${participant.attended ? 'btn-outline' : 'btn-success'} btn-sm attendance-btn" data-id="${participant.id}">
+                        <i class="function createAttendanceIcon(participant.attended)"></i> ${participant.attended ? 'Unmark' : 'Payment Status'}: ${participant.paymentStatus}</button>
+                `;
+                
+                resultItem.appendChild(header);
+                resultItem.appendChild(details);
+                resultItem.appendChild(actions);
+                
+                // Add event listeners to buttons
+                const editBtn = resultItem.querySelector('.edit-btn');
+                const attendanceBtn = resultItem.querySelector('.attendance-btn');
+                
+                editBtn.addEventListener('click', () => openEditModal(participant));
+                attendanceBtn.addEventListener('click', () => toggleAttendance(participant.id));
+                
+                searchResultsList.appendChild(resultItem);
+            });
+            
+            // Show "No results" if no participants found
+            if (filteredParticipants.length === 0) {
+                searchResultsList.innerHTML = `
+                    <div class="loading-container">
+                        <i class="fas fa-search" style="font-size: 48px; color: var(--text-tertiary); margin-bottom: 16px;"></i>
+                        <p style="color: var(--text-primary);">No participants found</p>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Try adjusting your search criteria</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Create payment status element
+        function createPaymentStatusElement(status) {
+            // Check if the status is a URL (contains "http" or "https")
+            const isUrl = status.includes('http') || status.includes('https');
+            
+            if (isUrl) {
+                return `<a href="${status}" target="_blank" class="payment-status link">${status}</a>`;
+            } else if (status.toLowerCase() === 'verified') {
+                return `<span class="payment-status verified">${status}</span>`;
+            } else if (status.toLowerCase() === 'done') {
+                return `<span class="payment-status done">${status}</span>`;
+            } else {
+                return `<span>${status}</span>`;
+            }
+        }
+
+        // Create attendance icon
+        function createAttendanceIcon(attended) {
+            return attended ? 'fa-check-circle' : 'fa-user-check';
+        }
+
+        // Create attendance text
+        function createAttendanceText(attended) {
+            return attended ? 'Unmark' : 'Mark as Attended';
         }
 
         // Render tree view
@@ -1513,7 +1808,7 @@
             if (filteredParticipants.length === 0) {
                 treeContainer.innerHTML = `
                     <div class="loading-container">
-                        <i class="fas fa-search" style="font-size: 48px; color: var(--text-tertiary); margin-bottom: 16px;"></i>
+                        <i class="fas fa-search" style="font-size:  <span style="font-size: 48px; color: var(--text-tertiary); margin-bottom: 16px;"></i>
                         <p style="color: var(--text-primary);">No participants found</p>
                         <p style="color: var(--text-secondary); font-size: 14px;">Try adjusting your search criteria</p>
                     </div>
@@ -1588,12 +1883,16 @@
                     <span>${participant.whatsapp}</span>
                 </div>
                 <div class="detail-item">
-                    <i class="fas fa-utensils"></i>
+                    <i class="fa-utensils"></i>
                     <span>${participant.lunchType}</span>
                 </div>
                 <div class="detail-item">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>${participant.district}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>${participant.paymentStatus}</span>
                 </div>
                 ${participant.remarks ? `
                 <div class="detail-item">
@@ -1724,7 +2023,7 @@
                 // Update filtered participants if needed
                 const filteredIndex = filteredParticipants.findIndex(p => p.id == id);
                 if (filteredIndex !== -1) {
-                    filteredParticipants[filteredIndex].attended = !wasAttended;
+                    filteredParticipants[filteredIndex] = participants[participantIndex];
                 }
                 
                 renderTreeView();
@@ -1822,7 +2121,7 @@
             let csv = 'ID,Name,Degree Programme,Email,WhatsApp,Lunch Type,District,Payment Status,Attended,Remarks\n';
             
             participants.forEach(participant => {
-                csv += `${participant.id},"${participant.name}","${participant.degree}","${participant.email}",${participant.whatsapp},"${participant.lunchType}","${participant.district}","${participant.paymentStatus}",${participant.attended},"${participant.remarks || ''}"\n`;
+                csv += `${participant.id},"${participant.name}","${participant.degree}","${participant.email}",${participant.whatsapp}","${participant.lunchType}","${participant.district}","${participant.paymentStatus}",${participant.attended},"${participant.remarks || ''}"\n`;
             });
             
             // Create a blob and download link
